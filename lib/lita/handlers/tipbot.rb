@@ -180,6 +180,9 @@ module Lita
         users    = active_room_members room_jid
 
         users.shuffle.each do |user|
+          # skip tipper
+          next if user['mention_name'] == response.user.mention_name
+
           log.info "tipping #{user['email']}"
 
           dest_hash = hash_email user['email']
@@ -232,10 +235,12 @@ module Lita
       # instead: make one call for all users, then check
       # to see if each is an active participant
       def active_room_members(room_jid)
+        log.debug "looking up room jid: #{room_jid}"
         data = room_data(room_jid)
+        log.debug "room_data: #{data.inspect}"
         results = []
         data['participants'].each do |p|
-          user = hipchat_api.users_show(p['id'])
+          user = hipchat_api.users_show(p['user_id'])
           next if user['user']['status'] != 'available'
           next if exclude_user? user['user']
           results << user['user']
@@ -250,13 +255,15 @@ module Lita
       def room_data(room_jid)
         room_id = room_id_from_jid room_jid
         data = hipchat_api.rooms_show room_id
+        log.debug "room #{room_id} data: #{data.inspect}"
         data['room']
       end
 
       def room_id_from_jid(room_jid)
         data = hipchat_api.rooms_list
+        log.debug "all room data: #{data.inspect}"
         room = data['rooms'].select {|r| r['xmpp_jid'] == room_jid}.first
-        room.nil? ? nil : room['id']
+        room.nil? ? nil : room['room_id']
       end
 
     end

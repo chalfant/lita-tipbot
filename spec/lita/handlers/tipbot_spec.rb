@@ -62,6 +62,37 @@ describe Lita::Handlers::Tipbot, lita_handler: true do
     expect(replies.first).to eq('foo')
   end
 
+  describe '#make_it_rain' do
+    let(:active_users) {
+      [
+        {
+          'name' => user.name,
+          'mention_name' => user.mention_name,
+          'email' => 'test@foo.com'
+        },
+        {
+          'name' => 'someguy',
+          'mention_name' => '@someguy',
+          'email' => 'someguy@foo.com'
+        }
+      ]
+    }
+
+    before(:each) do
+      allow(subject).to receive(:active_room_members).and_return(active_users)
+      subject.tipbot_api = double(tip: 'foo')
+      send_message("tipbot make it rain")
+    end
+
+    it 'tips a user' do
+      expect(replies).to include("A coin for someguy!")
+    end
+
+    it 'does not tip the tipper' do
+      expect(replies).to_not include("A coin for #{user.name}")
+    end
+  end
+
   describe '#hash_email' do
     it 'hashes properly' do
       email = 'cchalfant@leafsoftwaresolutions.com'
