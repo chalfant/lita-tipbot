@@ -37,10 +37,10 @@ describe Lita::Handlers::Tipbot, lita_handler: true do
     expect(replies.first).to eq('foo')
   end
 
-  it "responds with the user's balance" do
+  it "responds with the user's balance as a string" do
     subject.tipbot_api = double(balance: 1337)
     send_message("tipbot balance")
-    expect(replies.first).to eq(1337)
+    expect(replies.first).to eq(1337.to_s)
   end
 
   it "responds with the user's history" do

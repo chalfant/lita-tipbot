@@ -6,11 +6,12 @@ require 'json'
 module Lita
   module Handlers
     class TipbotApi
-      attr_accessor :base_url, :auth_token
+      attr_accessor :base_url, :auth_token, :log
 
       def initialize(params)
-        @base_url = params[:url]
-        @token    = params[:auth_token]
+        @base_url   = params[:url]
+        @auth_token = params[:auth_token]
+        @log        = params[:log]
       end
 
       def rest_get(url)
@@ -136,7 +137,7 @@ module Lita
 
       def balance(response)
         hash = user_hash(response.user.mention_name)
-        response.reply tipbot_api.balance(hash)
+        response.reply tipbot_api.balance(hash).to_s
       end
 
       def history(response)
@@ -202,7 +203,11 @@ module Lita
 
       def tipbot_api
         if @tipbot_api.nil?
-          params = { url: config.tipbot_url, auth_token: config.tipbot_auth_token }
+          params = {
+            url: config.tipbot_url,
+            auth_token: config.tipbot_auth_token,
+            log: log
+          }
           @tipbot_api = TipbotApi.new(params)
         end
         @tipbot_api
