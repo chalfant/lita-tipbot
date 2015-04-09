@@ -57,12 +57,12 @@ module Lita
         resp.body
       end
 
-      def tip(giver_hash, receiver_hash, amount)
+      def tip(src_hash, dest_hash, amount)
         url = "#{base_url}/wallet/tip"
 
         payload = {
-          from:   giver_hash,
-          to:     reciever_hash,
+          from:   src_hash,
+          to:     dest_hash,
           amount: amount
         }.to_json
 
