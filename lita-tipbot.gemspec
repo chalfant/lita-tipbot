@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = "lita-tipbot"
-  spec.version       = "0.1.2"
+  spec.version       = "0.2.0"
   spec.authors       = ["Chris Chalfant"]
   spec.email         = ["chalfants@gmail.com"]
   spec.description   = "Tip people with dogecoins!"

@@ -93,6 +93,114 @@ describe Lita::Handlers::Tipbot, lita_handler: true do
     end
   end
 
+  describe '#make_it_wayne' do
+    let(:active_users) {
+      [
+        {
+          'name' => user.name,
+          'mention_name' => user.mention_name,
+          'email' => 'test@foo.com'
+        },
+        {
+          'name' => 'someguy',
+          'mention_name' => '@someguy',
+          'email' => 'someguy@foo.com'
+        }
+      ]
+    }
+
+    before(:each) do
+      allow(subject).to receive(:active_room_members).and_return(active_users)
+      subject.tipbot_api = spy('tip')
+    end
+
+    it 'tips a user' do
+      send_message("tipbot make it wayne")
+      expect(subject.tipbot_api).to have_received(:tip).at_least(:once)
+    end
+  end
+
+  describe '#make_it_blaine' do
+    let(:active_users) {
+      [
+        {
+          'name' => user.name,
+          'mention_name' => user.mention_name,
+          'email' => 'test@foo.com'
+        },
+        {
+          'name' => 'someguy',
+          'mention_name' => '@someguy',
+          'email' => 'someguy@foo.com'
+        }
+      ]
+    }
+
+    before(:each) do
+      allow(subject).to receive(:active_room_members).and_return(active_users)
+    end
+
+    it 'tips one and only one user' do
+      subject.tipbot_api = spy('tip')
+      send_message("tipbot make it blaine")
+      expect(subject.tipbot_api).to have_received(:tip).once
+    end
+  end
+
+  describe '#make_it_crane' do
+    let(:active_users) {
+      [
+        {
+          'name' => user.name,
+          'mention_name' => user.mention_name,
+          'email' => 'test@foo.com'
+        },
+        {
+          'name' => 'someguy',
+          'mention_name' => '@someguy',
+          'email' => 'someguy@foo.com'
+        }
+      ]
+    }
+
+    before(:each) do
+      allow(subject).to receive(:active_room_members).and_return(active_users)
+    end
+
+    it 'tips one and only one user' do
+      subject.tipbot_api = spy('tip')
+      send_message("tipbot make it crane")
+      expect(subject.tipbot_api).to have_received(:tip).once
+    end
+  end
+
+  describe '#make_it_reign' do
+    let(:active_users) {
+      [
+        {
+          'name' => user.name,
+          'mention_name' => user.mention_name,
+          'email' => 'test@foo.com'
+        },
+        {
+          'name' => 'someguy',
+          'mention_name' => '@someguy',
+          'email' => 'someguy@foo.com'
+        }
+      ]
+    }
+
+    before(:each) do
+      allow(subject).to receive(:active_room_members).and_return(active_users)
+    end
+
+    it 'tips one and only one user' do
+      subject.tipbot_api = spy('tip')
+      send_message("tipbot make it reign")
+      expect(subject.tipbot_api).to have_received(:tip).once
+    end
+  end
+
   describe '#hash_email' do
     it 'hashes properly' do
       email = 'cchalfant@leafsoftwaresolutions.com'

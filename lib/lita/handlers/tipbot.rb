@@ -195,6 +195,144 @@ module Lita
         end
       end
 
+      # haphazardly give some percentage of people in the room 1-50 doge
+      def make_it_wayne(response)
+        images = [
+          "http://a4.files.saymedia-content.com/image/upload/c_fill,g_face,h_300,q_80,w_300/MTE5NTU2MzE2NDIxMTk1Mjc1.jpg",
+          "http://www.whale.to/c/9_23_09_wayne_newton_kabik-14-570.jpg",
+          "http://www.aceshowbiz.com/images/wennpic/wayne-newton-2013-american-music-awards-01.jpg",
+          "http://thestarsurgery.com/wp-content/uploads/2013/06/Wayne-Newton.jpg",
+          "http://www.mtv.com/crop-images/2013/08/27/WayneNewton_cr_EthanMiller_2009.jpg"
+        ]
+
+        response.reply([
+          "Watch out! #{response.user.name} is makin' it Wayne!",
+          images.sample
+        ])
+
+        src_hash = user_hash(response.user.mention_name)
+        room_jid = response.message.source.room
+        users    = active_room_members room_jid
+
+        # wayne's generosity typically runs out before everyone gets a tip
+        max_recipients = Random.rand(1..users.size)
+
+        max_recipients.times do
+
+          # wayne has had a few too many and forgets who he has already tipped
+          user = users.sample
+
+          log.info "tipping #{user['email']}"
+
+          dest_hash = hash_email user['email']
+          log.debug "SRC  HASH: #{src_hash}"
+          log.debug "DEST HASH: #{dest_hash}"
+          log.debug "NAME:      #{user['name']}"
+
+          amount = Random.rand(1..50)
+          response.reply "#{amount} for #{user['name']}!"
+
+          tipbot_api.tip src_hash, dest_hash, amount
+        end
+      end
+
+      # give a random person a random amount of 1-200 doge
+      def make_it_blaine(response)
+        images = [
+          "http://cdn.images.express.co.uk/img/dynamic/79/590x/444280_1.jpg",
+          "http://currentbuzz.my/Documents/Article/508176/TV%20street%20magician%20David%20Blaine_i2_cdnds_net.jpg",
+          "http://i.dailymail.co.uk/i/pix/2012/10/08/article-2214386-15633B31000005DC-349_306x423.jpg",
+          "http://i.telegraph.co.uk/multimedia/archive/01394/blaine_1394717c.jpg",
+          "http://i.ytimg.com/vi/fqJ0GaVU344/hqdefault.jpg"
+        ]
+
+        response.reply([
+          "What's that behind your ear? #{response.user.name} is makin' it Blaine!",
+          images.sample
+        ])
+
+        src_hash = user_hash(response.user.mention_name)
+        room_jid = response.message.source.room
+        users    = active_room_members room_jid
+
+        user = users.sample
+        amount = Random.rand(1..200)
+
+        log.info "tipping #{user['email']}"
+
+        dest_hash = hash_email user['email']
+        log.debug "SRC  HASH: #{src_hash}"
+        log.debug "DEST HASH: #{dest_hash}"
+        log.debug "NAME:      #{user['name']}"
+
+        response.reply "Someone just received #{amount}!"
+        tipbot_api.tip src_hash, dest_hash, amount
+      end
+
+      # give a random person a random amount of 1-32 doge
+      def make_it_crane(response)
+        images = [
+          "http://upload.wikimedia.org/wikipedia/en/6/68/Frasier_Crane_Shrink_Wrap_radio_station_KACL.jpg",
+          "http://0.media.dorkly.cvcdn.com/47/63/8525949c344ca18f060a73d22e4cafde-dr-frasier-crane.jpg",
+          "http://rushthefence.com/content/images/2014/Mar/Morgan_Bateson.jpg",
+          "https://38.media.tumblr.com/97d26f1f5c3979b5d0ca26a49490c946/tumblr_mk8hl1u5va1s2n8qho1_500.png",
+          "http://snakkle.wpengine.netdna-cdn.com/wp-content/uploads/2012/09/kelsey-grammer-cheers-tv-1985-photo-GC.jpg"
+        ]
+
+        response.reply([
+          "#{response.user.name} is makin' it Frasier Crane!",
+          images.sample
+        ])
+
+        src_hash = user_hash(response.user.mention_name)
+        room_jid = response.message.source.room
+        users    = active_room_members room_jid
+
+        user = users.sample
+        amount = Random.rand(1..32)
+
+        log.info "tipping #{user['email']}"
+
+        dest_hash = hash_email user['email']
+        log.debug "SRC  HASH: #{src_hash}"
+        log.debug "DEST HASH: #{dest_hash}"
+        log.debug "NAME:      #{user['name']}"
+
+        response.reply "#{user['name']} just received #{amount}!"
+        tipbot_api.tip src_hash, dest_hash, amount
+      end
+
+      # give a random person a random amount of 1-32 doge
+      def make_it_reign(response)
+        images = [
+          "http://i.imgur.com/WOzIWAs.gif",
+          "http://i.imgur.com/QlhuS09.gif",
+          "http://i.imgur.com/8RC90ul.gif"
+        ]
+
+        response.reply([
+          "#{response.user.name} is makin' it Reign!",
+          images.sample
+        ])
+
+        src_hash = user_hash(response.user.mention_name)
+        room_jid = response.message.source.room
+        users    = active_room_members room_jid
+
+        user = users.sample
+        amount = Random.rand(1..32)
+
+        log.info "tipping #{user['email']}"
+
+        dest_hash = hash_email user['email']
+        log.debug "SRC  HASH: #{src_hash}"
+        log.debug "DEST HASH: #{dest_hash}"
+        log.debug "NAME:      #{user['name']}"
+
+        response.reply "#{user['name']} just received #{amount}!"
+        tipbot_api.tip src_hash, dest_hash, amount
+      end
+
       attr_writer :hipchat_api, :tipbot_api
 
       def hipchat_api
